@@ -1,0 +1,26 @@
+.btn {
+	font: 12px verdana, tahoma;
+	color: #fff;
+	border: 1px solid #06C;
+	height: 2em;
+	background-color: #09C;
+	background-repeat: repeat-x;
+}
+
+.btn2 {
+	font: 12px verdana, tahoma;
+	color: #fff;
+	border: 1px solid #06C;
+	height: 2em;
+	background-color: red;
+	background-repeat: repeat-x;
+}
+
+.btn3 {
+	font: 12px verdana, tahoma;
+	color: #fff;
+	border: 1px solid #06C;
+	height: 2em;
+	background-color: green;
+	background-repeat: repeat-x;
+}

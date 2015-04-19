@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="ggzybiddingcandidates/list">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybiddingcandidates/list.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybiddingcandidates/show">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybiddingcandidates/show.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybiddingcandidates/create">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybiddingcandidates/create.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybiddingcandidates/update">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybiddingcandidates/update.jspx"/>
+    </definition>
+</tiles-definitions>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task" xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd" >
+    <!-- 系统定时任务配置 -->
+
+    <!--<task:annotation-driven />-->
+
+    <!--定时器,5分钟一次-->
+    <task:scheduled-tasks >
+        <task:scheduled ref="taskChain" method="execute" cron="0 0/5 * * * ?"/>
+    </task:scheduled-tasks>
+    <bean id="taskChain" class="com.lmd.spring.task.TaskChain"/>
+
+    <!--公告栏目自定义字段-->
+    <util:map id="customFields">
+        <entry key="信息标题" value="noticeName"/>
+        <entry key="创建日期" value="pubTime"/>
+        <entry key="文章正文" value=""/>
+        <entry key="开始时间" value="tendererDocGainTime"/>
+        <entry key="结束时间" value="tendererDocGainEndTime"/>
+    </util:map>
+
+    <!--开启同步的业务类型-->
+    <util:list id="syncBusinessTypes">
+        <value>JS</value>
+        <value>CG</value>
+        <value>HS</value>
+        <value>SL</value>
+        <value>TL</value>
+        <value>DT</value>
+        <value>RF</value>
+        <value>JQ</value>
+    </util:list>
+
+    <!--招标公告同步配置-->
+    <bean class="com.lmd.spring.task.SyncNoticeTask">
+        <!--默认同步栏目,如果找不到对应栏目会同步到该栏目下-->
+        <property name="defaultClmId" value="2102"></property>
+        <property name="clms">
+            <map>
+                <entry key="js" value="2102"/>
+                <!--黄河水利-->
+                <entry key="HS" value="2758"/>
+                <!--市属水利-->
+                <entry key="SL" value="2759"/>
+                <!--铁路总公司-->
+                <entry key="TL" value="2752"/>
+                <!--山东省铁路-->
+                <entry key="DT" value="2753"/>
+                <!--人防-->
+                <entry key="RF" value="2114"/>
+                <!--军队-->
+                <entry key="JQ" value="2772"/>
+            </map>
+        </property>
+        <!--开启同步的业务类型-->
+        <property name="syncBusinessTypes" ref="syncBusinessTypes"></property>
+
+        <!--自定义同步匹配条件 jcms columnId-->
+        <property name="syncJsmsTempleates">
+            <list>
+                <!--政府采购更正公告 多信息栏目-->
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2120" p:expressionValue="true"
+                      p:templateSuffix="js">
+                    <property name="expression">
+                        <value><![CDATA[bidPro.businessType.code.toString().equals('CG') && noticeNature.id.toString().equals('21721')]]></value>
+                    </property>
+                </bean>
+                <!--政府采购竞争性谈判 自定义栏目-->
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2118" p:expressionValue="true"
+                      p:templateSuffix="js">
+                    <property name="expression">
+                        <value><![CDATA[bidPro.businessType.code.toString().equals('CG') && bidPro.businessWay.code.toString().equals('Z')]]></value>
+                    </property>
+                    <property name="customFields" ref="customFields"/>
+                </bean>
+                <!--政府采购公开招标  自定义栏目-->
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2120" p:expressionValue="true"
+                      p:templateSuffix="js">
+                    <property name="expression">
+                        <value><![CDATA[bidPro.businessType.code.toString().equals('CG') && bidPro.businessWay.code.toString().equals('J')]]></value>
+                    </property>
+                    <property name="customFields" ref="customFields"/>
+                </bean>
+                <!--建设工程招标公告 自定义-->
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2102" p:expressionValue="true"
+                      p:templateSuffix="js">
+                    <property name="expression">
+                        <value><![CDATA[bidPro.businessType.code.toString().equals('JS')]]></value>
+                    </property>
+                    <property name="customFields" ref="customFields"/>
+                </bean>
+            </list>
+        </property>
+        <property name="builder">
+            <bean class="com.lmd.spring.task.JcmsInfoFreeMarkerBuilder">
+                <property name="prefix" value="notice"></property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!--中标公示同步配置-->
+    <bean class="com.lmd.spring.task.SyncBidPublicityTask">
+        <property name="defaultClmId" value="2103"></property>
+        <property name="clms">
+            <map>
+                <entry key="JS" value="2103"/>
+                <!--黄河水利-->
+                <entry key="HS" value="2760"/>
+                <!--市属水利-->
+                <entry key="SL" value="2761"/>
+                <!--铁路总公司-->
+                <entry key="TL" value="2755"/>
+                <!--山东省铁路-->
+                <entry key="DT" value="2756"/>
+                <!--人防-->
+                <entry key="RF" value="2114"/>
+                <!--军队-->
+                <entry key="JQ" value="2773"/>
+            </map>
+        </property>
+        <property name="syncJsmsTempleates">
+            <list>
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2123" p:expressionValue="true"
+                      p:templateSuffix="cg">
+                    <property name="expression">
+                        <value><![CDATA[noticeTenders.notice.bidPro.businessType.code.toString().equals('CG') && noticeTenders.notice.bidPro.businessWay.code.toString().equals('Z')]]></value>
+                    </property>
+                </bean>
+                <bean class="com.lmd.spring.task.SyncJsmsTempleate" p:clmId="2124" p:expressionValue="true"
+                      p:templateSuffix="cg">
+                    <property name="expression">
+                        <value><![CDATA[noticeTenders.notice.bidPro.businessType.code.toString().equals('CG') && noticeTenders.notice.bidPro.businessWay.code.toString().equals('J')]]></value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="builder">
+            <bean class="com.lmd.spring.task.JcmsInfoFreeMarkerBuilder">
+                <property name="prefix" value="publicity"></property>
+            </bean>
+        </property>
+        <property name="syncBusinessTypes" ref="syncBusinessTypes"></property>
+    </bean>
+
+    <!--jcms同步service-->
+    <bean class="com.lmd.ggzy.sync.service.impl.JcmsSyncServiceImpl">
+        <property name="generalUrl">
+            <value><![CDATA[http://www.jnggzy.gov.cn/jcms/interface/receive.jsp?userid=snatch&password=111111&id=33B124E-706D-4283-994F-288C053B2BF0]]></value>
+        </property>
+        <property name="customUrl">
+            <value><![CDATA[http://www.jnggzy.gov.cn/jcms/interface/spider/zdy.jsp?webid=1&user=snatch]]></value>
+        </property>
+    </bean>
+
+    <bean id="freemarkerConfig"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="freemarkerVariables">
+            <map>
+            </map>
+        </property>
+        <property name="templateLoaderPath" value="/WEB-INF/ftl" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="tag_syntax">auto_detect</prop>
+                <prop key="template_update_delay">5</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">0.######</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="auto_import">spring.ftl as s</prop>
+            </props>
+        </property>
+    </bean>
+
+
+</beans>

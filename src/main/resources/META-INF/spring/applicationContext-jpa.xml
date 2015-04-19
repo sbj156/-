@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+	<jpa:repositories base-package="com.ketayao.ketacustom.dao, com.lmd.ggzy.repository" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" factory-class="com.lmd.ggzy.repository.CustomRepositoryFactoryBean"/>
+	<bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+		<!-- <property name="persistenceUnitName" value="persistenceUnit"/> -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<value>com.ketayao.ketacustom.entity,com.lmd.ggzy.domain</value>
+		</property>
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"></property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<!-- 抓取策略 -->
+				<prop key="hibernate.max_fetch_depth">1</prop>
+				<prop key="hibernate.default_batch_fetch_size">4</prop>
+				<prop key="hibernate.jdbc.fetch_size">30</prop>
+				<prop key="hibernate.jdbc.batch_size">50</prop>
+				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+				<!-- 缓存 -->
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+				</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">/META-INF/spring/ehcache/ehcache-hibernate-local.xml
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.default_schema">${database.username}</prop>
+				<!-- <prop key="hibernate.generate_statistics">true</prop> <prop key="hibernate.use_sql_comments">true</prop> <prop key="hibernate.format_sql">true</prop> -->
+			</props>
+		</property>
+	</bean>
+	<bean id="sessionFactory" factory-bean="entityManagerFactory" factory-method="getSessionFactory" />
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="databasePlatform" value="${hibernate.dialect}" />
+	</bean>
+</beans>

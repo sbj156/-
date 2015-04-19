@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="ggzybidinvitations/list">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybidinvitations/list.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybidinvitations/show">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybidinvitations/show.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybidinvitations/create">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybidinvitations/create.jspx"/>
+    </definition>
+<definition extends="default" name="ggzybidinvitations/update">
+        <put-attribute name="body" value="/WEB-INF/views/ggzybidinvitations/update.jspx"/>
+    </definition>
+</tiles-definitions>

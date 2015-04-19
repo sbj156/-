@@ -1,0 +1,34 @@
+<#assign noticeTenders= publicity.noticeTenders>
+<#assign ggzyTenders=noticeTenders.tenders>
+<#assign bidPro=noticeTenders.tenders.bidPro>
+<table border="0" cellspacing="1" cellpadding="0" width="90%" bgcolor="#000000" align="center" style="padding-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px">
+<tbody>
+			<tr><td class="opr_left_td" bgcolor="#ffffff" colspan="4" align="center"><b>招标项目中标公示</b></td></tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%"><label>交易编号：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="30%">${ bidPro.proCode}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%"><label>招标项目名称：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff"  width="30%">${ bidPro.bidProName}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>招标人：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ bidPro.tenderee.subjectName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>代理机构：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${ bidPro.agency.subjectName}</td>
+			</tr>
+			<#assign item=noticeTenders.biddingCandidate>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>标段名称：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.tendersName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>中标单位 ：</label></td>
+                				<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.apply.biddingSubject.subjectName }</td>
+			</tr>
+
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示开始时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityBegintime.time?datetime}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示截止时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityEndtime.time?datetime}</td>
+			</tr>
+			</tbody>
+		</table>

@@ -1,0 +1,24 @@
+ @charset "utf-8";
+/* CSS Document */
+.hidden{display: none}
+/* body,ul,form{margin:0!important; padding:0!important; font-family:"宋体", Tahoma,"微软雅黑",Helvetica, Arial, sans-serif;} */
+body,ul,form{font-family:"宋体", Tahoma,"微软雅黑",Helvetica, Arial, sans-serif;}
+.div_xmtj{font-size:12px;}
+a{text-decoration:none;}
+img{border:none;}
+.div_xmtj{background:#FFF; padding:15px; margin:5px; border:1px solid #d4e9ee;}
+/*line-height:50px !important;   */
+.tble_xmlb{border-top:1px solid #d4e9ee; border-right:1px solid #d4e9ee;}
+.tble_xmlb td{border-bottom:1px solid #d4e9ee; border-left:1px solid #d4e9ee;}
+.tble_xmlb caption{font-size:20px; font-family:"微软雅黑","黑体",Helvetica, Arial, sans-serif; color:#47597f; font-weight:bold;}
+.tble_xmlb select,.tble_xmlb input{margin-left:2px;}
+.tble_xmlb .td1{background:#f6fafb; text-align:right; padding-right:2px;}
+.tble_xmlb .td2{background:#fafbfd; text-align:left;}
+.div_masge{background:#FFF; padding:1px; margin:4px; border:1px solid #d4e9ee;}
+/* .tble_masge{line-height:30px !important;} */
+.tble_masge .td1{text-align:right; padding-right:2px; color:#5e5e5e;}
+.tble_masge .td2{text-align:left; padding-left:2px; color:#1d0084;}
+.even{background:#f6fafb}
+.odd{background:#fafbfd}
+
+.td1 ,.td2 ,.td_auto{height: 35px;}

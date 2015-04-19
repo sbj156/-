@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="ggzycontracts/list">
+        <put-attribute name="body" value="/WEB-INF/views/ggzycontracts/list.jspx"/>
+    </definition>
+<definition extends="default" name="ggzycontracts/show">
+        <put-attribute name="body" value="/WEB-INF/views/ggzycontracts/show.jspx"/>
+    </definition>
+<definition extends="default" name="ggzycontracts/create">
+        <put-attribute name="body" value="/WEB-INF/views/ggzycontracts/create.jspx"/>
+    </definition>
+<definition extends="default" name="ggzycontracts/update">
+        <put-attribute name="body" value="/WEB-INF/views/ggzycontracts/update.jspx"/>
+    </definition>
+</tiles-definitions>

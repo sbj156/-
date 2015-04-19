@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- 自动扫描且只扫描@Controller -->
+	<!-- 加入定制化包实体路径com.sample -->
+	<util:properties id="js" location="/WEB-INF/spring/javascript.properties" />
+	<context:component-scan base-package="com.ketayao,com.lmd.ggzy" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+	<bean class="com.ketayao.ketacustom.util.persistence.DynamicSpecifications">
+	</bean>
+
+	<mvc:annotation-driven conversion-service="applicationConversionService">
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<mvc:default-servlet-handler />
+	<mvc:resources location="/, classpath:/META-INF/web-resources/" mapping="/resources/**" />
+	<mvc:interceptors>
+		<!-- 监控运行时间 -->
+		<!-- <mvc:interceptor> <mvc:mapping path="/**" /> <bean class="com.ketayao.ketacustom.spring.ExecuteTimeInterceptor" /> </mvc:interceptor> -->
+		<bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor" />
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang" />
+		<!-- 日志拦截记录 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/management/**" />
+			<mvc:mapping path="/business/**" />
+			<mvc:mapping path="/login/timeout/success" />
+			<bean class="com.ketayao.ketacustom.log.spring.LogInterceptor">
+				<property name="logAPI" ref="log4JDBCImpl" />
+				<property name="logAll" value="false"></property>
+			</bean>
+		</mvc:interceptor>
+		<!-- 数据权限验证 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.ketayao.ketacustom.spring.DataControlInterceptor" />
+		</mvc:interceptor>
+		<!-- 跳转拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.lmd.spring.interceptor.ForwardInterceptor" />
+		</mvc:interceptor>
+		<bean name="csInterceptor" class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+			<constructor-arg index="0">
+				<ref bean="applicationConversionService" />
+			</constructor-arg>
+		</bean>
+	</mvc:interceptors>
+	<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" p:cacheSeconds="0" id="messageSource" p:fallbackToSystemLocale="false">
+		<property name="basenames">
+			<list>
+				<value>WEB-INF/i18n/messages</value>
+				<value>WEB-INF/i18n/application</value>
+				<value>WEB-INF/i18n/business/basepro</value>
+				<value>WEB-INF/i18n/business/businesstype</value>
+				<value>WEB-INF/i18n/business/apply</value>
+				<value>WEB-INF/i18n/business/attachment</value>
+				<value>WEB-INF/i18n/business/biddingresnotice</value>
+				<value>WEB-INF/i18n/business/biddingsubject</value>
+				<value>WEB-INF/i18n/business/biddoc</value>
+				<value>WEB-INF/i18n/business/bidinvitation</value>
+				<value>WEB-INF/i18n/business/bidopening</value>
+				<value>WEB-INF/i18n/business/bidpro</value>
+				<value>WEB-INF/i18n/business/bidpublicity</value>
+				<value>WEB-INF/i18n/business/bondrecord</value>
+				<value>WEB-INF/i18n/business/contract</value>
+				<value>WEB-INF/i18n/business/evaluationreport</value>
+				<value>WEB-INF/i18n/business/exceptionalcase</value>
+				<value>WEB-INF/i18n/business/ggzybiddingcandidate</value>
+				<value>WEB-INF/i18n/business/notice</value>
+				<value>WEB-INF/i18n/business/objection</value>
+				<value>WEB-INF/i18n/business/proquaapplydoc</value>
+				<value>WEB-INF/i18n/business/proquadoc</value>
+				<value>WEB-INF/i18n/business/proquaresult</value>
+				<value>WEB-INF/i18n/business/prospectnotice</value>
+				<value>WEB-INF/i18n/business/qualification</value>
+				<value>WEB-INF/i18n/business/quaresnotice</value>
+				<value>WEB-INF/i18n/business/subjectperformance</value>
+				<value>WEB-INF/i18n/business/tenderdoc</value>
+				<value>WEB-INF/i18n/business/tenders</value>
+				<value>WEB-INF/i18n/business/literacymessage</value>
+				<value>WEB-INF/i18n/tree</value>
+				<value>WEB-INF/i18n/business/literacy</value>
+				<value>WEB-INF/i18n/business/auditres</value>
+				<value>WEB-INF/i18n/business/expertapply</value>
+				<value>WEB-INF/i18n/business/expert</value>
+				<value>WEB-INF/i18n/business/assessmentexpert</value>
+				<value>WEB-INF/i18n/business/tradingservicesfees</value>
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.ui.context.support.ResourceBundleThemeSource" id="themeSource" />
+	<!-- Store preferred theme configuration in a cookie -->
+	<bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver" p:cookieName="theme" p:defaultThemeName="standard" />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="maxUploadSize">
+			<value>1048576</value><!-- 上传文件大小限制为1M，1*1024*1024 -->
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL -->
+	<mvc:default-servlet-handler />
+	<!-- 外网访问视图解析 是外网，且不是移动端访问-->
+	<bean class="com.lmd.ggzy.servlet.WebInternalResourceViewResolver">
+		<property name="viewClass" value="com.lmd.ggzy.servlet.view.JstlVIew"></property>
+		<property name="prefix" value="/WEB-INF/webviews/" />
+		<property name="suffix" value=".jsp" />
+		<property name="attributes">
+			<props>
+				<prop key="business_ctx">business</prop>
+			</props>
+		</property>
+		<property name="cache" value="false"></property>
+		<property name="order" value="1" />
+	</bean>
+	<!-- 手机view com.lmd.ggzy.servlet.PdaInternalResourceViewResolver -->
+	<bean class="com.lmd.ggzy.servlet.PdaInternalResourceViewResolver">
+		<property name="viewClass" value="com.lmd.ggzy.servlet.view.JstlVIew"></property>
+		<property name="prefix" value="/WEB-INF/pdaviews/" />
+		<property name="suffix" value=".jsp" />
+		<property name="attributes">
+			<props>
+				<prop key="business_ctx">business</prop>
+			</props>
+		</property>
+		<property name="cache" value="false"></property>
+		<property name="order" value="2" />
+	</bean>
+	<!-- 定义JSP文件的位置 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="com.lmd.ggzy.servlet.view.JstlVIew"></property>
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+		<property name="attributes">
+			<props>
+				<prop key="business_ctx">business</prop>
+			</props>
+		</property>
+		<property name="cache" value="false"></property>
+	</bean>
+	<!-- 定义无Controller的path<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/management/index" />
+	<mvc:view-controller path="/resourceNotFound" view-name="resourceNotFound" />
+	<!-- 全局异常配置 start -->
+	<bean id="exceptionResolver" class="com.lmd.ggzy.servlet.handler.CustomExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+				<prop key="java.lang.Throwable">error/500</prop>
+			</props>
+		</property>
+		<property name="statusCodes">
+			<props>
+				<prop key="error/500">500</prop>
+				<prop key="error/404">404</prop>
+				<prop key="error/403">403</prop>
+			</props>
+		</property>
+		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+		<property name="warnLogCategory" value="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" />
+		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+		<property name="defaultErrorView" value="error/500" />
+		<!-- 默认HTTP状态码 ，返回错误默认设置的状态码 -->
+		<property name="defaultStatusCode" value="500" />
+	</bean>
+	<!-- 全局异常配置 end -->
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制 begin -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制 end -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" /> <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"> <property name="messageConverters"> <list> </list> </property> </bean> -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+</beans>

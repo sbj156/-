@@ -1,0 +1,70 @@
+<#assign noticeTenders= publicity.noticeTenders>
+<#assign ggzyTenders=noticeTenders.tenders>
+<#assign bidPro=noticeTenders.tenders.bidPro>
+<table border="0" cellspacing="1" cellpadding="0" width="90%" bgcolor="#000000" align="center" style="padding-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px">
+<tbody>
+			<tr><td class="opr_left_td" bgcolor="#ffffff" colspan="5" align="center"><b>招标项目中标公示格式</b></td></tr>
+			
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>一、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">采购人：${ bidPro.tenderee.subjectName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">地址：${ bidPro.tenderee.contactAddress?if_exists}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">联系人：${ bidPro.contract?if_exists}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">联系电话:${bidPro.contractTel?if_exists}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>二、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">代理机构：${ bidPro.agency.subjectName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">地址：${ bidPro.agency.contactAddress?if_exists}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">联系人：${ bidPro.agencyContacts}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">联系电话:${bidPro.agencyTel}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>三、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%">项目名称：${ bidPro.bidProName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="3">交易编号：${ bidPro.proCode}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>四、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="4">招标公告日期：${ noticeTenders.notice.makeTime.time?datetime}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>五、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="4">开标日期：${noticeTenders.bidTime.time?datetime}</td>
+			</tr>
+				<#assign item=noticeTenders.biddingCandidate>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>六、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="4">
+				中标情况:<br/>
+				<table>
+					<tr><td>包号</td><td>采购内容</td><td>中标供应商</td><td>成交<#if noticeTenders.ggzyBidOpenings.openningType.id == 3>费率<#else>金额</#if>
+					</td></tr>
+					<tr><td>${ggzyTenders.tendersName}</td><td>${ggzyTenders.proName?if_exists}</td><td>${item.applyTender.apply.biddingSubject.subjectName }</td>
+					<td>
+					<#if noticeTenders.ggzyBidOpenings.openningType.id == 3>
+					${item.applyTender.ggzyBidDocs.rate}
+					<#else>
+					${item.applyTender.ggzyBidDocs.price}元
+					</#if>
+					</td></tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>七、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="4">评标委员会成员名单：
+				<#list noticeTenders.expertApply.signed as expert>
+				${expert.expertName};
+				</#list>
+				</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20px"><label>八、</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示开始时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityBegintime.time?datetime}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示截止时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityEndtime.time?datetime}</td>
+			</tr>
+			</tbody>
+		</table>

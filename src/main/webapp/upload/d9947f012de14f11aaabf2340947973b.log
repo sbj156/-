@@ -1,0 +1,8 @@
+[0403/191534:INFO:ksafe_host.cpp(2197)] SAFE_CSafeHost::ApplyLocalState self_protection_enabled =  1
+[0403/191534:INFO:ksafe_host.cpp(2200)] SAFE_CSafeHost::ApplyLocalState CSafeHost::default_browser_protector_ =  1
+[0403/191534:INFO:ksafe_host.cpp(310)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed
+[0407/221920:INFO:ksafe_host.cpp(310)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed
+[0408/090032:INFO:ksafe_host.cpp(310)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed
+[0408/180213:INFO:ksafe_host.cpp(310)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed
+[0409/081428:INFO:ksafe_host.cpp(314)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed
+[0409/173229:INFO:ksafe_host.cpp(314)] SAFE_CSafeHost::InitializeKsApiInit useksapi failed

@@ -1,0 +1,72 @@
+<#assign noticeTenders= publicity.noticeTenders>
+<#assign ggzyTenders=noticeTenders.tenders>
+<#assign bidPro=noticeTenders.tenders.bidPro>
+<table border="0" cellspacing="1" cellpadding="0" width="90%" bgcolor="#000000" align="center" style="padding-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px">
+<tbody>
+			<tr><td class="opr_left_td" bgcolor="#ffffff" colspan="4" align="center"><b>招标项目中标公示</b></td></tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%"><label>交易编号：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="30%">${ bidPro.proCode}</td>
+				<td class="opr_left_td" bgcolor="#ffffff" width="20%"><label>招标项目名称：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff"  width="30%">${ bidPro.bidProName}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>招标人：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ bidPro?.tenderee?.subjectName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>代理机构：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${ bidPro.agency?.subjectName}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>标段名称：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.tendersName}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>工程名称：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.proName}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>建设地点：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="3">${bidPro.basePro.proAddress}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>招标范围：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" colspan="3">${ggzyTenders.bidRange}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>面积：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.area?if_exists}平方米</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>规模：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.scale?if_exists}</td>
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>结构类型：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${ggzyTenders.structureType?if_exists}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>开标时间:</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff">${noticeTenders.bidTime.time?datetime}</td>
+			</tr>
+			<#assign item=noticeTenders.biddingCandidate>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>中标单位 ：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.apply.biddingSubject.subjectName }</td>
+				<#if noticeTenders.ggzyBidOpenings.openningType.id == 3>
+					<td class="opr_left_td" bgcolor="#ffffff"><label>中标费率：</label></td>
+					<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.ggzyBidDocs.rate}%</td>
+					<#else>
+					<td class="opr_left_td" bgcolor="#ffffff"><label>中标价：</label></td>
+					<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.ggzyBidDocs.price}元</td>
+				</#if>
+				
+			</tr>
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>中标工期：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.ggzyBidDocs.projectDuration?if_exists }日历日</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>质量标准：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${item.applyTender.ggzyBidDocs.quality?if_exists}</td>
+			</tr>
+
+			<tr>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示开始时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityBegintime.time?datetime}</td>
+				<td class="opr_left_td" bgcolor="#ffffff"><label>公示截止时间：</label></td>
+				<td class="opr_left_td" bgcolor="#ffffff" >${publicity.publicityEndtime.time?datetime}</td>
+			</tr>
+			</tbody>
+		</table>

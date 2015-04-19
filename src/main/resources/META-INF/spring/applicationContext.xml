@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- This will automatically locate any and all property files you have 
+		within your classpath, provided they fall under the META-INF/spring directory. 
+		The located property files are parsed and their values can then be used within 
+		application context files in the form of ${propertyKey}. -->
+	<context:property-placeholder location="classpath*:META-INF/spring/*.properties" />
+	<!-- Turn on AspectJ @Configurable support. As a result, any time you instantiate 
+		an object, Spring will attempt to perform dependency injection on that object. 
+		This occurs for instantiation via the "new" keyword, as well as via reflection. 
+		This is possible because AspectJ is used to "weave" Roo-based applications 
+		at compile time. In effect this feature allows dependency injection of any 
+		object at all in your system, which is a very useful feature (without @Configurable 
+		you'd only be able to dependency inject objects acquired from Spring or subsequently 
+		presented to a specific Spring dependency injection method). Roo applications 
+		use this useful feature in a number of areas, such as @PersistenceContext 
+		injection into entities. -->
+	<context:spring-configured />
+	<!-- This declaration will cause Spring to locate every @Component, @Repository 
+		and @Service in your application. In practical terms this allows you to write 
+		a POJO and then simply annotate the new POJO as an @Service and Spring will 
+		automatically detect, instantiate and dependency inject your service at startup 
+		time. Importantly, you can then also have your new service injected into 
+		any other class that requires it simply by declaring a field for your service 
+		inside the relying class and Spring will inject it. Note that two exclude 
+		filters are declared. The first ensures that Spring doesn't spend time introspecting 
+		Roo-specific ITD aspects. The second ensures Roo doesn't instantiate your 
+		@Controller classes, as these should be instantiated by a web tier application 
+		context. Refer to web.xml for more details about the web tier application 
+		context setup services. Furthermore, this turns on @Autowired, @PostConstruct 
+		etc support. These annotations allow you to use common Spring and Java Enterprise 
+		Edition annotations in your classes without needing to do any special configuration. 
+		The most commonly used annotation is @Autowired, which instructs Spring to 
+		dependency inject an object into your class. -->
+	<context:component-scan base-package="com.lmd.ggzy,com.lmd.spring,com.ketayao">
+		<context:exclude-filter expression=".*_Roo_.*"
+			type="regex" />
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+		<!-- <context:exclude-filter type="regex" expression="com.lmd.spring.task.*"/> -->
+	</context:component-scan>
+
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSource">
+		<property name="driverClassName" value="${database.driverClassName}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="1800000" />
+		<property name="numTestsPerEvictionRun" value="3" />
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="60"/>
+		<property name="logAbandoned" value="true"/>
+		
+	</bean>
+	<tx:annotation-driven mode="aspectj"
+		transaction-manager="transactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 系统日志跟踪功能 -->
+	<bean id="log4JDBCImpl" class="com.ketayao.ketacustom.log.impl.Log4JDBCImpl">
+		<property name="logInfoService" ref="logInfoServiceImpl" />
+		<property name="rootLogLevel" value="ERROR" />
+		<property name="customLogLevel">
+			<map>
+			
+				<entry key="com.ketayao.ketacustom" value="TRACE" />
+			</map>
+		</property>
+	</bean>
+	
+	
+	<!-- 审核中标通知条件 -->
+	<bean id="auditResNotice" class="com.lmd.ggzy.jpa.criterion.task.ResNnoticeSpecification"/>
+	<bean id="tradingFee" class="com.lmd.ggzy.jpa.criterion.task.TradingFeeSpecification"/>
+	<bean class="com.lmd.ggzy.jpa.criterion.SpecificationFactory">
+		<property name="specifications">
+			<map>
+				<!-- 流程判断条件 start -->
+				<!-- 进场登记列表判断条件 -->
+				<entry key="bidpro">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.BidProSpecification"/>
+				</entry>
+				<!-- 制作公告列表判断条件 -->
+				<entry key="makenotice">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.MakeNoticeSpecification"/>
+				</entry>
+				<!-- 审核公告列表判断条件 -->
+				<entry key="auditnotice">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.AuditNoticeSpecification"/>
+				</entry>
+				<!-- 接受报名列表判断条件 -->
+				<entry key="apply">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.ApplySpecification"/>
+				</entry>
+				<!-- 保证金缴退列表判断条件 -->
+				<entry key="bond">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.BondSpecification"/>
+				</entry>
+				<!-- 保证金缴退列表判断条件 -->
+				<entry key="bond">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.BondSpecification"/>
+				</entry>
+				<!-- 场所预约列表判断条件 -->
+				<entry key="appointment">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.AppointmentSpecification"/>
+				</entry>
+				<!-- 资格预审项目场所预约列表判断条件 -->
+				<entry key="quaappointment">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.QuaAppointmentSpecification"/>
+				</entry>
+				<!-- 录入资格预审结果列表条件 -->
+				<entry key="proquaresults">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.QuaResultsSpecification"/>
+				</entry>
+				<!-- 开标列表判断条件 -->
+				<entry key="bidopening" >
+					<bean class="com.lmd.ggzy.jpa.criterion.task.OpenningSpecification"/>
+				</entry>
+				<!-- 专家抽取列表判断条件 -->
+				<entry key="expert_apply" >
+					<bean class="com.lmd.ggzy.jpa.criterion.task.ExpertApplySpecification"/>
+				</entry>
+				<!-- 评标列表判断条件 -->
+				<entry key="evaluation" >
+					<bean class="com.lmd.ggzy.jpa.criterion.task.EvaluationSpecification"/>
+				</entry>
+				<!-- 制作公示列表判断条件 -->
+				<entry key="makepulicity" >
+					<bean class="com.lmd.ggzy.jpa.criterion.task.MakePulicitySpecification"/>
+				</entry>
+				<!-- 审核公示列表判断条件 -->
+				<entry key="auditpublicity" >
+					<bean class="com.lmd.ggzy.jpa.criterion.task.AuditPublicitySpecification"/>
+				</entry>
+				<!-- 交易服务费列表判断条件 -->
+				<entry key="tradingfee" value-ref="tradingFee"/>
+				<!-- 审核中标通知列表判断条件,只限制建设工程,水利工程 ,其他类型暂无此环节-->
+				<entry key="auditresnotice" value-ref="auditResNotice"/>
+				<!-- <entry key="auditresnotice_sl" value-ref="auditResNotice"/> -->
+				<!-- 中标通知书打印列表条件,由于建设工程,水利工程添加中标通知审核环节,这里对建设工程,水利工程分别做判断 -->
+				<entry key="printresnotice" value-ref="tradingFee"/>
+				<entry key="exceptionalcases">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.ExceptionCaseSpecification"/>
+				</entry>
+				<!--择日重开-->
+
+				<entry key="rerun">
+					<bean class="com.lmd.ggzy.jpa.criterion.task.ReRunSpecification"/>
+				</entry>
+
+				
+				<!-- 流程判断条件 end -->
+
+				
+				<!-- 下为子条件,在流程判断条件中可引用 -->
+				<!-- 开标时间判断条件  当天 -->
+				<entry key="dueopentime" >
+					<bean class="com.lmd.ggzy.jpa.criterion.sub.BidTimeSpecification"/>
+				</entry>
+				<!-- 是否到资格预审时间判断条件-->
+				<entry key="quatime">
+					<bean class="com.lmd.ggzy.jpa.criterion.sub.QuaTimeSpecification"/>
+				</entry>
+				<!-- 资格预审公告判断条件 -->
+				<entry key="proqua">
+					<bean class="com.lmd.ggzy.jpa.criterion.sub.NoticeQuaSpecification"/>
+				</entry>
+				<!-- noticetenders资格预审判断条件,即发布标段的公告是否是资格预审公告 -->
+				<entry key="noticetendersqua" >
+					<bean class="com.lmd.ggzy.jpa.criterion.sub.NoticeTendersQuaSpecification"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.jdbc.core.JdbcTemplate" name="jdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean class="com.lmd.ggzy.jdbc.template.ReportDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+	<!-- <bean class="com.lmd.ggzy.sms.CCPSmsService" init-method="init">
+		<constructor-arg name="serverIp" value="sandboxapp.cloopen.com"/>
+		<constructor-arg name="serverPort" value="8883"/>
+		<constructor-arg name="accountSid" value="aaf98f89493217c801493ccc01c708e0"/>
+		<constructor-arg name="accountToken" value="0055c2f59c904edcaca0f48842680cd9"/>
+		<constructor-arg name="appId" value="8a48b551493219e001493ccc3fce0870"/>
+	</bean> -->
+	<bean class="org.springframework.web.client.RestTemplate"/>
+	<!-- <bean class="com.lmd.ggzy.sms.RESTSmsService"/> -->
+	<!-- 信息中心短信平台 -->
+	<bean class="com.lmd.ggzy.sms.MasSmsService">
+		<property name="apiCode" value="A6"/>
+		<property name="imIP" value="192.168.0.181"/>
+		<property name="loginName" value="ggzy"/>
+		<property name="loginPWD" value="111111"/>
+		<property name="dbName" value="mas"/>
+		<property name="msgTemplate" value="msg(验证码),您正在登陆济南公共资源交易微门户。"/>
+	</bean>
+    <bean class="com.lmd.ggzy.controller.ApplicationConversionServiceFactoryBean" id="applicationConversionService">
+        <property name="converters">
+            <list>
+                <bean class="com.lmd.spring.converter.String2ClobConverter"></bean>
+                <bean class="com.lmd.spring.converter.Clob2StringConverter"></bean>
+                <bean class="com.lmd.spring.converter.String2DataClob"></bean>
+                <bean class="com.lmd.spring.converter.DataClob2String"></bean>
+                <bean class="com.lmd.spring.converter.String2CalendarConverter"></bean>
+            </list>
+        </property>
+    </bean>
+	<import resource="applicationContext-jpa.xml"/>
+	<import resource="applicationContext-servlet-filter.xml"/>
+	<import resource="applicationContext-shiro.xml"/>
+	<import resource="applicationContext-task.xml"/>
+</beans>

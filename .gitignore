@@ -1,0 +1,15 @@
+.classpath
+doc/
+.externalToolBuilders/
+ggzy_2014-04-03_11.27.19.zip
+ggzy.iml
+log.roo
+logs/
+overlays/
+.project
+.springBeans
+.svn/
+target/
+.umlproject
+*/**/.svn
+.settings/
