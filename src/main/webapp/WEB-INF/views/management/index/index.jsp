@@ -1,7 +1,8 @@
 <%@page import="com.lmd.util.IPUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.Date"%>    
+<%@ page import="java.util.Date"%>
+<%@ page import="com.ketayao.utils.SecurityUtils" %>
 <%@ include file="/WEB-INF/views/include.inc.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -118,9 +119,14 @@ $(function(){
 			<%-- <img width="1080" src="${contextPath}/styles/dwz/themes/default/images/logo.jpg" alt="" /> --%>
 			<ul class="nav" style="color: #000000;">
 				<li style="color: #000000;"><a href="${contextPath}/management/index" style="color: #000000;">主页</a></li>
-				<li style="color: #000000;"><a href="http://192.168.0.181:7001" style="color: #000000;">原综合管理系统</a></li>
-
-				<li style="color: #000000;"><a href="${contextPath}/management/index/updateBase" style="color: #000000;" target="dialog" mask="true" width="550" height="250">修改用户信息</a></li>
+                <% if(SecurityUtils.getSubject().hasRole("代理机构")){%>
+				<li style="color: #000000;"><a id="old_sys" href="http://192.168.0.181:8080" style="color: #000000;">
+                    原报名系统</a></li>
+                <%} else{%>
+                <li style="color: #000000;"><a id="old_sys" href="http://192.168.0.181:7001" style="color: #000000;">
+                    原综合管理系统</a></li>
+                <%}%>
+				<li style="color: #000000;"><a  href="${contextPath}/management/index/updateBase" style="color: #000000;" target="dialog" mask="true" width="550" height="250">修改用户信息</a></li>
 				
 				<li style="color: #000000;"><a href="${contextPath}/management/index/updatePwd" style="color: #000000;" target="dialog" mask="true" width="500" height="200">修改密码</a></li>
 				<li style="color: #000000;"><a href="${contextPath}/logout" style="color: #000000;">退出</a></li>

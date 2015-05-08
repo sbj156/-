@@ -112,6 +112,7 @@ public class ModuleController {
 		System.out.println(showDevice);
 //		if(showDevice != null)
 			oldModule.setShowDevice(showDevice);
+        oldModule.setShowNet(module.getShowNet());
 		oldModule.setName(module.getName());
 		oldModule.setPriority(module.getPriority());
 		oldModule.setDescription(module.getDescription());

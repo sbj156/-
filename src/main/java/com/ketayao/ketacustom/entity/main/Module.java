@@ -149,7 +149,14 @@ public class Module implements Comparable<Module>, Idable<Long>, Serializable {
 	@Column(columnDefinition = "number(10) default 1")
 	private int showDevice;
 
-	public int getShowDevice() {
+    /**
+     * 内外网,内网:1,外网:2,内外网:3
+     */
+    @Column(columnDefinition = "number(10) default 3")
+    private int showNet;
+
+
+    public int getShowDevice() {
 		return showDevice;
 	}
 	
@@ -165,7 +172,15 @@ public class Module implements Comparable<Module>, Idable<Long>, Serializable {
 		}
 	}
 
-	public boolean isBusinessModule() {
+    public int getShowNet() {
+        return showNet;
+    }
+
+    public void setShowNet(int showNet) {
+        this.showNet = showNet;
+    }
+
+    public boolean isBusinessModule() {
 		return businessModule;
 	}
 

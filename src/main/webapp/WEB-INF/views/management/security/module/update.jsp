@@ -119,6 +119,13 @@ jQuery(document).ready(function(){
 			<input type="checkbox" value="1" name="showDevice" ${(module.showDevice == 1 || module.showDevice == 3)? "checked":"" }/>电脑
 			<input type="checkbox" value="2" name="showDevice" ${(module.showDevice == 2 || module.showDevice == 3)? "checked":"" }/>手机
 		</p>
+            <p>
+                <label>内外网：</label>
+                <input type="radio" value="1" name="showNet" ${module.showNet == 1 ?
+                        "checked":"" }/>内网
+                <input type="radio" value="2" name="showNet" ${module.showNet == 2 ?  "checked":"" }/>外网
+                <input type="radio" value="2" name="showNet" ${module.showNet == 3 ? "checked":""}/>全部
+            </p>
 		<p class="nowrap">
 			<label>描述：</label>
 			<textarea name="description" cols="29" rows="3" maxlength="256" class="input-medium textarea-scroll">${module.description }</textarea>

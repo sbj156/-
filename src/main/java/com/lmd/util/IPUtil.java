@@ -78,7 +78,9 @@ public class IPUtil {
     }
 
     public static boolean isDomainReuest(HttpServletRequest request){
-        String host = request.getHeader("host");
+        String host = request.getHeader("X-Forwarded-Host");
+        if(host == null || host.length() == 0 || "unknown".equalsIgnoreCase(host)){
+        host = request.getHeader("host");}
         if(host != null && host.matches("^[a-zA-Z]]*.+"))
             return true;
         return false;

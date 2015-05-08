@@ -118,7 +118,8 @@ $(function(){
 			<%-- <img width="1080" src="${contextPath}/styles/dwz/themes/default/images/logo.jpg" alt="" /> --%>
 			<ul class="nav" style="color: #000000;">
 				<li style="color: #000000;"><a href="${contextPath}/management/index" style="color: #000000;">主页</a></li>
-				<li style="color: #000000;"><a href="http://www.jnggzy.gov.cn/col/col2213/index.html" target="_blank" style="color: #000000;">原交易系统</a></li>
+				<li style="color: #000000;"><a id="old_sys" href="http://www.jnggzy.gov.cn/col/col2213/index.html"
+                                                target="_blank" style="color: #000000;">原交易系统</a></li>
 				
 				<li style="color: #000000;"><a href="${contextPath}/management/index/updateBase" style="color: #000000;" target="dialog" mask="true" width="550" height="250">修改用户信息</a></li>
 				

@@ -63,7 +63,7 @@ alert("${msg }");
                             <td>
                                 <table cellspacing="0" cellpadding="0" align="center" border="0" height="85" width="100%" bgcolor="#A2CEFF">
                                     <tbody><tr>
-                                        <td align="center" valign="middle"><font style="font-family: &#39;黑体&#39;;font-size: 20px;">济南公共资源交易系统</font>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <td align="center" valign="middle"><font style="font-family: &#39;黑体&#39;;font-size: 20px;">济南公共资源交易网业务处理</font>&nbsp;&nbsp;&nbsp;&nbsp;
                                         </td>
                                     </tr>
                                     </tbody></table>

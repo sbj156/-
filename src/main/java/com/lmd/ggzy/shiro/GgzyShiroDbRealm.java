@@ -115,12 +115,12 @@ public class GgzyShiroDbRealm extends ShiroDbRealm {
             /**
              * 如果是电脑端
              */
-            if(!hasRole(info.getPrincipals(), "管理员") && StringUtils.isBlank(request.getParameter
+            /*if(!hasRole(info.getPrincipals(), "管理员") && StringUtils.isBlank(request.getParameter
                     (CA_NAME_KEY_NAME)) &&
                     !HttpRequestDeviceUtils
                     .isMobileDevice
                     ((HttpServletRequest) request))
-                throw new OtherAutnenticationException("请使用CA证书登录");
+                throw new OtherAutnenticationException("请使用CA证书登录");*/
 		}
 	}
 

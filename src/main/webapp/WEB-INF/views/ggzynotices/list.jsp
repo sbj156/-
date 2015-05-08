@@ -6,8 +6,8 @@
 <dwz:paginationForm
 	action="${contextPath }/${business_ctx}/ggzybidproes" page="${page }" onsubmit="return navTabSearch(this)">
 	<div class="pageHeader">
-		<div class="searchBar">
-			<ul class="subBar">
+        <div class="searchBar">
+            <ul class="searchContent">
 				<li><label><spring:message code="ggzybasepro_proname" />：</label>
 					<input type="text" name="search_LIKE_bidProName"
 					value="${param["search_LIKE_bidProName"] }" /></li>
@@ -19,17 +19,17 @@
 						<option value="1" ${param.search_EQ_noticeMaked eq '1'? 'selected':'' }>已制作</option>
 				</select></li>
 				<input type="hidden" name="nv_" value="${param['nv_'] }">
-				<li><div class="button">
-							<div class="buttonContent">
-								<button type="submit">
-									<spring:message code="searchbtn" />
-								</button>
-							</div>
-						</div></li>
+
 			</ul>
 			<div class="subBar">
 				<ul>
-					
+                    <li><div class="button">
+                        <div class="buttonContent">
+                            <button type="submit">
+                                <spring:message code="searchbtn" />
+                            </button>
+                        </div>
+                    </div></li>
 				</ul>
 			</div>
 		</div>

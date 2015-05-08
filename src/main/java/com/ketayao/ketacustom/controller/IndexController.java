@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
 
 import com.ketayao.ketacustom.SecurityConstants;
@@ -112,10 +114,16 @@ public class IndexController {
 
 	private void checkWithBusinessTypes(Module module, Subject subject, List<GgzyBusinessType> businessTypes, int device) {
 		List<Module> list1 = new ArrayList<Module>();
-		for (Module m1 : module.getChildren()) {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        int netFlag = IPUtil.isDomainReuest(request) || !IPUtil.isInnerIP(request)? 2:1;
+        for (Module m1 : module.getChildren()) {
 			// 只加入拥有show权限的Module
 			if (subject.isPermitted(m1.getSn() + ":" + Permission.PERMISSION_SHOW)) {
-				if ((m1.getShowDevice() & device) == device || subject.hasRole("管理员")) {
+				if (((m1.getShowDevice() & device) == device ) || subject
+                        .hasRole
+                                ("管理员") ) {
+                    if((SecurityUtils.getSubject().hasRole("web") && ((m1.getShowNet() & netFlag) != netFlag)))
+                        continue;
 					checkWithBusinessTypes(m1, subject, businessTypes,  device);
 					list1.add(m1);
 				}
